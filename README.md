@@ -153,6 +153,10 @@ command = "zola build && npm run abridge && zola build"
 
 Abridge by default uses elasticlunr for the search library (zola's default), but both tinysearch and stork are supported search libraries.
 
+tinysearch demo: https://jieiku.github.io/abridge-tinysearch/
+
+stork demo: https://jieiku.github.io/abridge-stork/
+
 **Switch to tinysearch:**
 
 First you have to install tinysearch so that you can build the index:
