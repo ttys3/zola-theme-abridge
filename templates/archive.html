@@ -1,0 +1,121 @@
+{# This Page Shows the Posts Archives Grouped by Year: example.com/archive/ #}
+
+{% extends "base.html" %}
+
+{%- block seo %}
+  {{- super() }}
+  {%- set title = "Archives" %}
+
+  {%- if config.title %}
+    {%- set title_addition = title_separator ~ config.title %}
+  {%- else %}
+    {%- set title_addition = "" %}
+  {%- endif %}
+
+  {%- set description = config.description %}
+
+  {{- macros_head::seo(config=config, title=title, title_addition=title_addition, description=description, is_home=true) }}
+{%- endblock seo %}
+
+
+
+{%- block content %}
+
+
+
+<style>
+    .archive {
+      width: 100%;
+    }
+  
+    h2.archive__group-year-header {
+      width: 100%;
+      margin: 1.8rem 2rem 0 0;
+      border-bottom: 1px solid var(--a1);
+    }
+  
+    .archive__group-month {
+      display: flex;
+      align-items: flex-start;
+      padding: 10px 0 0;
+    }
+  
+    .archive__group-month:not(:last-of-type) {
+      width: 100%;
+      border-bottom: 1px solid var(--a1);
+    }
+  
+    .archive__group-month h3.archive__group-month-header {
+      margin: 1.8rem 2rem 0 0;
+    }
+  
+    .archive__group-posts {
+      flex-grow: 1;
+      padding: 1.85rem 0 20px 0;
+    }
+  
+    .archive__post {
+      margin: 0 0 5px;
+      overflow: hidden;
+    }
+  
+    .archive__post h3.archive__post-title {
+      font-size: 1em;
+      font-weight: 400;
+      margin-top: 0px;
+      display: inline-flex;
+    }
+  
+    .archive__post h3.archive__post-title a {
+      text-decoration: none;
+    }
+  
+    .archive__post h3.archive__post-title a:hover {
+      text-decoration: underline;
+    }
+  
+    .archive__post-date,
+    .archive__post-author,
+    .archive__post-read-time {
+      font-size: 15px;
+      float: right;
+      opacity: .8;
+    }
+  </style>
+
+  
+<div class="archive">
+    <h1>{{ title }}</h1>
+    
+{%- set section_item = get_section(path="_index.md") %}
+
+<div class="archive__group-year">
+
+    {%- for year, year_posts in section_item.pages | group_by(attribute="year") %}
+
+    <h2 class="archive__group-year-header">{{ year }}</h2>
+
+    {%- for month, month_posts in year_posts | group_by(attribute="month") %}
+
+    <div class="archive__group-month">
+      <h3 class="archive__group-month-header">{{ year }}-{{ month }}</h3>
+      <div class="archive__group-posts">
+        {%- for post in month_posts %}
+        <div class="archive__post">
+          <h3 class="archive__post-title"><a
+              href="{{ post.permalink | safe }}">{{ post.title }}</a>
+          </h3>
+            <time class="archive__post-date" datetime="{{ post.date }}">{{ post.date | date(format="%F") }}</time>
+        </div>
+        {%- endfor %}
+      </div>
+    </div>
+    {%- endfor %}
+
+    {%- endfor %}
+  </div>
+
+
+{%- endblock content %}
+
+</div>
